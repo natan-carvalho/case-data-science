@@ -11,9 +11,3 @@ def clean_text(text: str) -> str:
   text = text.translate(str.maketrans('', '', string.punctuation))  # Remove pontuação
   text = text.strip()  # Remove espaços em branco no início e no final
   return text
-
-def remove_values_null(df, column):
-  """
-  Função para remover linhas com valores nulos em uma coluna específica.
-  """
-  return df[df[column].notna()]

@@ -15,6 +15,16 @@ vectorizer = joblib.load('models/vectorizer.pkl')
 class NewsRequest(BaseModel):
   title: str
 
-@app.post("/")
+@app.get("/")
 def health_check():
-  return {"message": "API is running"}
+  return {"mensagem": "API rodando!"}
+
+@app.post("/predicao")
+def predict(request: NewsRequest):
+  texto = clean_text(request.title)
+  texto_vectorizado = vectorizer.transform([texto])
+  predicao = model.predict(texto_vectorizado)
+  return {
+    "title": request.title,
+    "categoria_predita": predicao[0]
+  }

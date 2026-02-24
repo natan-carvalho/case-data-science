@@ -11,6 +11,8 @@ app = FastAPI(title="API de Classificação de Notícias")
 
 model = joblib.load('models/model.pkl')
 vectorizer = joblib.load('models/vectorizer.pkl')
+model2 = joblib.load('models/model_v2_svm.pkl')
+vectorizer2 = joblib.load('models/vectorizer_v2.pkl')
 
 class NewsRequest(BaseModel):
   title: str
@@ -24,6 +26,16 @@ def predict(request: NewsRequest):
   texto = clean_text(request.title)
   texto_vectorizado = vectorizer.transform([texto])
   predicao = model.predict(texto_vectorizado)
+  return {
+    "title": request.title,
+    "categoria_predita": predicao[0]
+  }
+
+@app.post("/predicao_v2")
+def predict_v2(request: NewsRequest):
+  texto = clean_text(request.title)
+  texto_vectorizado = vectorizer2.transform([texto])
+  predicao = model2.predict(texto_vectorizado)
   return {
     "title": request.title,
     "categoria_predita": predicao[0]

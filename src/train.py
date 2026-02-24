@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import joblib
 from sklearn.model_selection import train_test_split
@@ -17,7 +18,7 @@ df['date'] = pd.to_datetime(df['date'], errors='coerce')
 
 # 4. Removendo categorias com poucas amostras
 frequencia_categorias = df['category'].value_counts(normalize=True)
-valida_categorias = frequencia_categorias[frequencia_categorias >= 0.01].index
+valida_categorias = frequencia_categorias[frequencia_categorias >= 0.001].index
 df = df[df['category'].isin(valida_categorias)]
 
 # 5. Limpar os textos
@@ -47,6 +48,7 @@ model.fit(X_train_vec, y_train)
 y_pred = model.predict(X_test_vec)
 print(classification_report(y_test, y_pred))
 
-# 11. Salvar o modelo e o vetorizer
+# 11. Criar a pasta models se não existir e salvar o modelo e o vetorizer
+os.makedirs('models', exist_ok=True)
 joblib.dump(model, 'models/model.pkl')
 joblib.dump(vectorizer, 'models/vectorizer.pkl')

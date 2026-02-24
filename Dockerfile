@@ -9,6 +9,7 @@ RUN mkdir -p models
 RUN pip install -r requirements.txt
 
 RUN python src/train.py
+RUN python src/train_v2.py
 
 EXPOSE 8000
 
